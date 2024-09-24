@@ -1,5 +1,8 @@
+import { DisciplinaService } from './../../services/disciplina.service';
+import { Disciplina } from './../../models/disciplina';
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder } from '@angular/forms';
+
 
 @Component({
   selector: 'app-inscricao',
@@ -8,17 +11,8 @@ import { FormArray, FormBuilder } from '@angular/forms';
 })
 export class InscricaoComponent {
 
-  disciplinas: any[] = [{ "value" : 1, "label" : "Artes" },
-    { "value" : 2, "label" : "Biologia" },
-    { "value" : 3, "label" : "Ciências" },
-    { "value" : 4, "label" : "Educação física" },
-    { "value" : 5, "label" : "Física" },
-    { "value" : 6, "label" : "Geografia" },
-    { "value" : 7, "label" : "História" },
-    { "value" : 8, "label" : "Matemática" },
-    { "value" : 9, "label" : "Português" },
-    { "value" : 10, "label" : "Química" }];
 
+  disciplinas: any[] = [];
 
     monitorForm = this._formBuilder.group({
       id: null,
@@ -33,25 +27,36 @@ export class InscricaoComponent {
       }),
       disponibilidade: this._formBuilder.array([this.criarDisponibilidade()])
     });
-    
-    agenda = [{ week_day: 'SEGUNDA', from: '', to: '' }];
-  
 
-    constructor(private _formBuilder: FormBuilder) {
+    agenda = [{ week_day: 'SEGUNDA', from: '', to: '' }];
+
+
+    constructor(private _formBuilder: FormBuilder, disciplinaService:DisciplinaService) {{
+        disciplinaService.buscarDisciplinas()
+                .subscribe(res => {
+                  this.disciplinas = res?.map(i=>{
+                  return{
+                    value: i.id,
+                    label: i.nome
+                  }
+                })
+        });
+  }
+
     }
 
     addAgenda() {
       this.agenda.push({ week_day: 'SEGUNDA', from: '', to: '' });
     }
-  
+
     get disponibilidade(): FormArray {
       return this.monitorForm.get('disponibilidade') as FormArray;
     }
-  
+
     addDisponibilidade() {
       this.disponibilidade.push(this.criarDisponibilidade());
     }
-  
+
     criarDisponibilidade() {
       return this._formBuilder.group({
         diaSemana: [''],
@@ -59,8 +64,9 @@ export class InscricaoComponent {
         ate: ['']
       });
     }
-  
+
     onSalvar() {
-      
+
     }
 }
+
