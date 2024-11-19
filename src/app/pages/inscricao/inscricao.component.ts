@@ -2,6 +2,8 @@ import { DisciplinaService } from './../../services/disciplina.service';
 import { Disciplina } from './../../models/disciplina';
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder } from '@angular/forms';
+import { Monitor } from 'src/app/models/monitor';
+import { MonitorService } from 'src/app/services/monitor.service';
 
 
 @Component({
@@ -31,7 +33,10 @@ export class InscricaoComponent {
     agenda = [{ week_day: 'SEGUNDA', from: '', to: '' }];
 
 
-    constructor(private _formBuilder: FormBuilder, disciplinaService:DisciplinaService) {{
+    constructor(private _formBuilder: FormBuilder,
+                private disciplinaService:DisciplinaService,
+                private monitorService: MonitorService)
+                 {{
         disciplinaService.buscarDisciplinas()
                 .subscribe(res => {
                   this.disciplinas = res?.map(i=>{
@@ -66,7 +71,7 @@ export class InscricaoComponent {
     }
 
     onSalvar() {
-
+      let monitor: Monitor = this.monitorForm.value;
+      this.monitorService.inserir(monitor).subscribe(data => console.log(data));
     }
-}
-
+  }
