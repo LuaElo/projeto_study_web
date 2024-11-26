@@ -54,7 +54,7 @@ export class InscricaoComponent {
       this.agenda.push({ week_day: 'SEGUNDA', from: '', to: '' });
     }
 
-    get disponibilidade(): FormArray {
+   get disponibilidade(): FormArray {
       return this.monitorForm.get('disponibilidade') as FormArray;
     }
 
@@ -71,7 +71,9 @@ export class InscricaoComponent {
     }
 
     onSalvar() {
-      let monitor: Monitor = this.monitorForm.value;
-      this.monitorService.inserir(monitor).subscribe(data => console.log(data));
+      let monitor: Monitor = new Monitor;
+      monitor = Object.assign(monitor,this.monitorForm.value)
+      this.monitorService.inserir(monitor)
+      .subscribe(data => console.log(data));
     }
   }

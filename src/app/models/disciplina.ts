@@ -1,4 +1,4 @@
-export interface Disciplina {
-  id: number;
-  nome: string;
+export class Disciplina {
+  public id: number = 0;
+   public nome: string = '';
 }
